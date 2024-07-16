@@ -38,18 +38,13 @@ public class DiceDropper : MonoBehaviour
         PrepareFirstPhase();
         isRealDropStarted = false;
         dropPresets = dices.Select(_ => DropPreset.GenerateRandom()).ToList();
-        DropWithPresets();
-    }
 
-    private void DropWithPresets()
-    {
         for (var i = 0; i < dices.Count; i++)
         {
             dices[i].Drop(dropPresets[i]);
+            dices[i].StartRecordPath();
         }
     }
-
-
 
     private void FixedUpdate()
     {
@@ -59,7 +54,7 @@ public class DiceDropper : MonoBehaviour
             dices.ForEach(dice => dice.TurnOver());
             isRealDropStarted = true;
             PrepareSecondPhase();
-            DropWithPresets();
+            dices.ForEach(dice => dice.StopRecordPathAndPlay());
         }
     }
 }
